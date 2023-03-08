@@ -101,16 +101,16 @@
 /////////////////////////////////////////////////
 // Unknown Type
 
-let userInput: unknown;
-userInput = 7;
-userInput = "Max";
+// let userInput: unknown;
+// userInput = 7;
+// userInput = "Max";
 
 /////////////////////////////////////////////////
 // Never Type
 
-const generateError = (message: string, code: number) => {
-  throw { message: message, errorCount: code };
-  // it never returns, it NEVER produces a value (because it crashes because of the throw)
-};
+// const generateError = (message: string, code: number) => {
+//   throw { message: message, errorCount: code };
+//   // it never returns, it NEVER produces a value (because it crashes because of the throw)
+// };
 
-generateError("An error occurred!", 500);
+// generateError("An error occurred!", 500);
