@@ -1,5 +1,5 @@
-class Department {
-  private readonly id: string;
+abstract class Department {
+  protected readonly id: string;
   private name: string;
   protected employees: string[] = [];
 
@@ -8,9 +8,14 @@ class Department {
     this.name = n;
   }
 
-  describe() {
-    console.log("Department: " + this.name);
+  static createEmployee(name: string) {
+    return { name: name };
   }
+
+  abstract describe(this: Department): void;
+  // {
+  //   console.log("Department: " + this.name);
+  // }
 
   addEmployee(employee: string) {
     this.employees.push(employee);
@@ -29,10 +34,15 @@ class ITDepartment extends Department {
     super(id, "IT");
     this.admins = admins;
   }
+
+  describe() {
+    console.log("IT Department: " + this.id);
+  }
 }
 
 class AccountingDepartment extends Department {
   private lastReport: string;
+  private static instance: AccountingDepartment;
 
   get mostRecentReport() {
     if (this.lastReport) {
@@ -45,9 +55,21 @@ class AccountingDepartment extends Department {
     this.addReport(value);
   }
 
-  constructor(id: string, private reports: string[]) {
+  private constructor(id: string, private reports: string[]) {
     super(id, "Accounting");
     this.lastReport = reports[0];
+  }
+
+  static getInstance() {
+    if (this.instance) {
+      return this.instance;
+    }
+    this.instance = new AccountingDepartment("d3", []);
+    return this.instance;
+  }
+
+  describe() {
+    console.log("Accounting Department: " + this.id);
   }
 
   addEmployee(name: string) {
@@ -65,18 +87,24 @@ class AccountingDepartment extends Department {
 
 const it = new ITDepartment("d2", ["Jack"]);
 console.log(it);
+it.describe();
 
-const accounting = new AccountingDepartment("d3", []);
+// const accounting = new AccountingDepartment("d3", []);
+const accounting = AccountingDepartment.getInstance();
 accounting.addReport("Something went wrong...");
 accounting.mostRecentReport = "Well, well, well...";
 console.log(accounting.mostRecentReport);
 accounting.addEmployee("Max");
 accounting.addEmployee("Manu");
 accounting.printEmployeeInformation();
+accounting.describe();
 
-const someDepartment = new Department("d1", "Accounting");
-someDepartment.addEmployee("Max");
-someDepartment.addEmployee("Manu");
+// const someDepartment = new Department("d1", "Accounting");
+// someDepartment.addEmployee("Max");
+// someDepartment.addEmployee("Manu");
 // someDepartment.employees[2] = "Anna";
-someDepartment.describe();
-someDepartment.printEmployeeInformation();
+// someDepartment.describe();
+// someDepartment.printEmployeeInformation();
+
+const employee1 = Department.createEmployee("Roman");
+console.log(employee1);
